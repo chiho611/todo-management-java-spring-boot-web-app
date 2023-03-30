@@ -3,11 +3,9 @@
     <title> Welcome Page </title>
 </head>
 <body>
-    Welcome to the login page !
-    <form method="post">
-        <div> Welcome to in28minutes </div>
-        <div> Your Name : ${name}</div>
-<%--        <div> Your Password : ${password}</div>--%>
-    </form>
+<div class="container">
+    <h1>Welcome ${name}</h1>
+    <a href="list-todos">Manage</a> your todos
+</div>
 </body>
 </html>
