@@ -2,6 +2,8 @@ package com.in28minutes.springboot.myfirstwebapp.todo;
 
 import jakarta.validation.Valid;
 import org.eclipse.tags.shaded.org.apache.xpath.operations.Mod;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -24,15 +26,16 @@ public class TodoController {
     }
 
     @RequestMapping("list-todos")
-    public String listAllTodos(ModelMap model) {
-        List<Todo> todos = todoService.findByUserName("in28minutes");
-        model.addAttribute("todos", todos);
+    public String listAllTodos(ModelMap modelMap) {
+        String name = getLoggedinUserName();
+        List<Todo> todos = todoService.findByUserName(name);
+        modelMap.addAttribute("todos", todos);
         return "listTodos";
     }
 
     @RequestMapping(value = "add-todo", method = RequestMethod.GET)
     public String showNewTodoPage(ModelMap modelMap) {
-        String name = modelMap.get("name").toString();
+        String name = getLoggedinUserName();
         Todo todo = new Todo(0, name, "", LocalDate.now(), false);
         modelMap.put("todo", todo);
         return "todo";
@@ -43,7 +46,7 @@ public class TodoController {
         if (bindingResult.hasErrors()) {
             return "todo";
         }
-        String name = modelMap.get("name").toString();
+        String name = getLoggedinUserName();
         todoService.addTodo(name, todo.getDescription(), todo.getTargetDate(), false);
         return "redirect:list-todos";
     }
@@ -74,5 +77,10 @@ public class TodoController {
         todoService.updateTodo(todo);
 
         return "redirect:list-todos";
+    }
+
+    private String getLoggedinUserName() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getName();
     }
 }
