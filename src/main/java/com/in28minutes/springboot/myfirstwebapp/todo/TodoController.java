@@ -1,7 +1,6 @@
 package com.in28minutes.springboot.myfirstwebapp.todo;
 
 import jakarta.validation.Valid;
-import org.eclipse.tags.shaded.org.apache.xpath.operations.Mod;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -16,27 +15,29 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Controller
-@SessionAttributes("name")
+@SessionAttributes("username")
 public class TodoController {
     private TodoService todoService;
+    private TodoRepository todoRepository;
 
-    public TodoController(TodoService todoService) {
+    public TodoController(TodoService todoService, TodoRepository todoRepository) {
         super();
         this.todoService = todoService;
+        this.todoRepository = todoRepository;
     }
 
     @RequestMapping("list-todos")
     public String listAllTodos(ModelMap modelMap) {
-        String name = getLoggedinUserName();
-        List<Todo> todos = todoService.findByUserName(name);
+        String username = getLoggedinUserName();
+        List<Todo> todos = todoRepository.findByUsername(username);
         modelMap.addAttribute("todos", todos);
         return "listTodos";
     }
 
     @RequestMapping(value = "add-todo", method = RequestMethod.GET)
     public String showNewTodoPage(ModelMap modelMap) {
-        String name = getLoggedinUserName();
-        Todo todo = new Todo(0, name, "", LocalDate.now(), false);
+        String username = getLoggedinUserName();
+        Todo todo = new Todo(0, username, "", LocalDate.now(), false);
         modelMap.put("todo", todo);
         return "todo";
     }
@@ -46,8 +47,8 @@ public class TodoController {
         if (bindingResult.hasErrors()) {
             return "todo";
         }
-        String name = getLoggedinUserName();
-        todoService.addTodo(name, todo.getDescription(), todo.getTargetDate(), false);
+        String username = getLoggedinUserName();
+        todoService.addTodo(username, todo.getDescription(), todo.getTargetDate(), false);
         return "redirect:list-todos";
     }
 
@@ -72,7 +73,7 @@ public class TodoController {
             return "todo";
         }
 
-        todo.setName("test");
+        todo.setusername("test");
         todo.setTargetDate(LocalDate.now().plusYears(3));
         todoService.updateTodo(todo);
 

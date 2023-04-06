@@ -1,30 +1,48 @@
 package com.in28minutes.springboot.myfirstwebapp.todo;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 
-public class Todo {
-    private int id;
-    private String name;
-    @Size(min = 10,message = "Enter At Least 10 Characters")
-    private String description;
-    private LocalDate targetDate;
-    private boolean done;
+//JPA
+//Bean -> database table
 
-    public Todo(int id, String name, String description, LocalDate targetDate, boolean done) {
+@Entity
+public class Todo {
+
+    public Todo() {
+
+    }
+
+    public Todo(int id, String username, String description, LocalDate targetDate, boolean done) {
         this.id = id;
-        this.name = name;
+        this.username = username;
         this.description = description;
         this.targetDate = targetDate;
         this.done = done;
     }
 
+    @Id
+    @GeneratedValue
+    private int id;
+
+    private String username;
+    @Size(min = 10,message = "Enter At Least 10 Characters")
+    private String description;
+    private LocalDate targetDate;
+    private boolean done;
+
+
+
     @Override
     public String toString() {
         return "Todo{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", username='" + username + '\'' +
                 ", description='" + description + '\'' +
                 ", targetDate=" + targetDate +
                 ", done=" + done +
@@ -39,12 +57,12 @@ public class Todo {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getusername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setusername(String username) {
+        this.username = username;
     }
 
     public String getDescription() {

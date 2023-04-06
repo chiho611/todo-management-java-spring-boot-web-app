@@ -19,13 +19,13 @@ public class TodoService {
         todos.add(new Todo(++todosCount, "in28minutes", "Learn Full stack", LocalDate.now().plusYears(3), false));
     }
 
-    public List<Todo> findByUserName(String username) {
-        Predicate<? super Todo> predicate = todo -> todo.getName().equalsIgnoreCase(username);
+    public List<Todo> findByUsername(String username) {
+        Predicate<? super Todo> predicate = todo -> todo.getusername().equalsIgnoreCase(username);
         return todos.stream().filter(predicate).toList();
     }
 
-    public void addTodo(String name, String description, LocalDate targetDate, boolean done) {
-        Todo todo = new Todo(++todosCount, name, description, targetDate, done);
+    public void addTodo(String username, String description, LocalDate targetDate, boolean done) {
+        Todo todo = new Todo(++todosCount, username, description, targetDate, done);
         todos.add(todo);
     }
 
