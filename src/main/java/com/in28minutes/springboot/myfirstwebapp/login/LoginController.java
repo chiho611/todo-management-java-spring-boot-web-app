@@ -27,11 +27,11 @@ public class LoginController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String gotoLoginPage(ModelMap modelMap) {
 //        logger.info("info!" );
-        modelMap.put("name",getLoggedinUserName());
+        modelMap.put("name",getLoggedInUserName());
         return "welcome";
     }
 
-    private String getLoggedinUserName(){
+    private String getLoggedInUserName(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication.getName();
     }
